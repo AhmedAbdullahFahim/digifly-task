@@ -45,10 +45,6 @@ const TextEditor = () => {
       icon: '/text-editor/outdent.png',
     },
     {
-      id: 'strikeThrough',
-      icon: '/text-editor/strikeThrough.png',
-    },
-    {
       id: 'bold',
       icon: '/text-editor/bold.png',
     },

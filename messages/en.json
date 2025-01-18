@@ -21,7 +21,9 @@
     "validEmail": "Please enter a valid email",
     "send": "Send",
     "results": "Results:",
-    "usersEmpty": "You have not added any users yet..."
+    "usersEmpty": "You have not added any users yet...",
+    "userUploaded": "User uploaded successfully! ✌",
+    "failedUploading": "Failed to upload user... 🙁"
   },
   "partTwo": {
     "title": "Part 2",

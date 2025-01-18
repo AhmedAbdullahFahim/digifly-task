@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from './Button'
 import Input from './Input'
+import { useEffect, useState } from 'react'
 
 const UserForm = () => {
   const {
@@ -25,28 +26,42 @@ const UserForm = () => {
     mode: 'onBlur',
   })
 
+  const [loading, setLoading] = useState<boolean>(false)
+  const [feedbackMessage, setFeedbackMessage] = useState<string>('')
+
   const dispatch = useDispatch<AppDispatch>()
   const { usersData } = useSelector((state: RootState) => state.users)
 
   const t = useTranslations('partOne')
 
   const onSubmit = async (data: FormData) => {
+    setLoading(true)
     try {
       const result: AxiosResponse = await axios.post(
         'http://localhost:1337/user-informations',
         { ...data }
       )
       dispatch(setUsers([...usersData, result.data.data]))
-
+      setFeedbackMessage(t('userUploaded'))
       setValue('FirstName', '')
       setValue('Phone', '')
       setValue('LastName', '')
       setValue('Email', '')
     } catch (err) {
       console.log('err', err)
+      setFeedbackMessage(t('failedUploading'))
       throw err
+    } finally {
+      setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (!!feedbackMessage)
+      setTimeout(() => {
+        setFeedbackMessage('')
+      }, 2000)
+  }, [feedbackMessage])
 
   return (
     <form
@@ -112,7 +127,12 @@ const UserForm = () => {
           },
         }}
       />
-      <Button type='submit' text={t('send')} disabled={!isValid} />
+      <Button
+        type='submit'
+        text={!!feedbackMessage ? feedbackMessage : t('send')}
+        disabled={!isValid || loading || !!feedbackMessage}
+        loading={loading}
+      />
     </form>
   )
 }

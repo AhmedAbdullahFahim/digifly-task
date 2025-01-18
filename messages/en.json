@@ -19,7 +19,9 @@
     "twoChars": "This field must be at least 2 characters long",
     "validMobileNumber": "Please enter a valid mobile number",
     "validEmail": "Please enter a valid email",
-    "send": "Send"
+    "send": "Send",
+    "results": "Results:",
+    "usersEmpty": "You have not added any users yet..."
   },
   "partTwo": {
     "title": "Part 2",

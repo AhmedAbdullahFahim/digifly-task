@@ -8,14 +8,14 @@ import {
 
 interface Props<T extends FieldValues> {
   label: string
-  name: Path<T> // Constrain name to keys of the form values
+  name: Path<T>
   placeholder: string
   error?: string
   containerStyle?: string
   labelStyle?: string
   inputStyle?: string
-  register: UseFormRegister<T> // Register function typed with the generic form values
-  validationRules?: RegisterOptions<T> // Optional validation rules
+  register: UseFormRegister<T>
+  validationRules?: RegisterOptions<T>
   maxLength?: number
 }
 
@@ -24,14 +24,12 @@ const Input = <T extends FieldValues>({
   name,
   placeholder,
   error,
-  // onChange,
-  // onBlur,
   containerStyle,
   labelStyle,
   maxLength,
   inputStyle,
   register,
-  validationRules = {}, // Default to an empty object
+  validationRules = {},
 }: Props<T>) => {
   return (
     <div

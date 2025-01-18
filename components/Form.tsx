@@ -3,25 +3,21 @@ import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import Button from './Button'
 import Input from './Input'
-
-type FormData = {
-  firstName: string
-  lastName: string
-  mobileNumber: string
-  email: string
-}
+import { FormData } from '@/types'
+import axios from 'axios'
 
 const UserForm = () => {
   const {
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     register,
+    setValue,
   } = useForm<FormData>({
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      mobileNumber: '',
-      email: '',
+      FirstName: '',
+      LastName: '',
+      Phone: '',
+      Email: '',
     },
     mode: 'onBlur',
   })
@@ -29,20 +25,29 @@ const UserForm = () => {
   const t = useTranslations('partOne')
 
   const onSubmit = async (data: FormData) => {
-    console.log('data', data)
+    try {
+      await axios.post('http://localhost:1337/user-informations', { ...data })
+      setValue('FirstName', '')
+      setValue('Phone', '')
+      setValue('LastName', '')
+      setValue('Email', '')
+    } catch (err) {
+      console.log('err', err)
+      throw err
+    }
   }
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className='flex-1 flex flex-col gap-y-6 lg:gap-y-2 xl:gap-y-6 w-full'
+      className='flex-1 flex flex-col gap-y-6 lg:gap-y-4 xl:gap-y-6 w-full'
     >
       <div className='w-full flex flex-col sm:flex-row lg:flex-col xl:flex-row items-center gap-6 lg:gap-2 xl:gap-6'>
         <Input
-          name='firstName'
+          name='FirstName'
           label={t('firstName')}
           placeholder={t('firstName')}
-          error={errors.firstName?.message ?? ''}
+          error={errors.FirstName?.message ?? ''}
           register={register}
           validationRules={{
             required: t('required'),
@@ -53,10 +58,10 @@ const UserForm = () => {
           }}
         />
         <Input
-          name='lastName'
+          name='LastName'
           label={t('lastName')}
           placeholder={t('lastName')}
-          error={errors.lastName?.message ?? ''}
+          error={errors.LastName?.message ?? ''}
           register={register}
           validationRules={{
             required: t('required'),
@@ -68,10 +73,10 @@ const UserForm = () => {
         />
       </div>
       <Input
-        name='mobileNumber'
+        name='Phone'
         label={t('mobileNumber')}
         placeholder={t('mobileNumber')}
-        error={errors.mobileNumber?.message ?? ''}
+        error={errors.Phone?.message ?? ''}
         register={register}
         maxLength={11}
         validationRules={{
@@ -83,10 +88,10 @@ const UserForm = () => {
         }}
       />
       <Input
-        name='email'
+        name='Email'
         label={t('email')}
         placeholder={t('email')}
-        error={errors.email?.message ?? ''}
+        error={errors.Email?.message ?? ''}
         register={register}
         validationRules={{
           required: t('required'),
@@ -96,7 +101,7 @@ const UserForm = () => {
           },
         }}
       />
-      <Button type='submit' text={t('send')} />
+      <Button type='submit' text={t('send')} disabled={!isValid} />
     </form>
   )
 }

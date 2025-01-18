@@ -6,6 +6,7 @@ interface Props {
   text?: string
   children?: ReactNode
   buttonStyle?: string
+  disabled?: boolean
 }
 
 const Button = ({
@@ -14,12 +15,14 @@ const Button = ({
   children,
   text,
   type = 'button',
+  disabled = false,
 }: Props) => {
   return (
     <button
+      disabled={disabled}
       type={type}
       onClick={onClick}
-      className={`w-full bg-[#49BD88] p-2 rounded-sm text-white font-bold text-center ${buttonStyle}`}
+      className={`w-full bg-[#49BD88] py-4 rounded-sm text-white font-bold text-center disabled:opacity-50 transition-all ease-in-out hover:opacity-80 ${buttonStyle}`}
     >
       {text ? text : children}
     </button>

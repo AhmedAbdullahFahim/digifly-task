@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { Poppins } from 'next/font/google'
 import './globals.css'
+import { Providers } from '@/components/Provider'
 
 const PoppinsFont = Poppins({
   subsets: ['latin', 'latin-ext'],
@@ -34,10 +35,12 @@ export default async function RootLayout({
           fontFamily: `"Poppins", "Noto Sans Arabic", sans-serif`,
         }}
       >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <Navbar />
-          {children}{' '}
-        </NextIntlClientProvider>
+        <Providers>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <Navbar />
+            {children}
+          </NextIntlClientProvider>
+        </Providers>
       </body>
     </html>
   )

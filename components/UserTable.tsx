@@ -1,19 +1,20 @@
+'use client'
+import { AppDispatch, RootState } from '@/store'
+import { setUsers } from '@/store/slices/usersSlice'
 import { TableHeader, User } from '@/types'
 import axios, { AxiosResponse } from 'axios'
-import { getTranslations } from 'next-intl/server'
-import React from 'react'
+import { useTranslations } from 'next-intl'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import Loading from './loading'
 
-const fetchData = async () => {
-  const results: AxiosResponse = await axios.get(
-    'http://localhost:1337/user-informations'
-  )
+const UserTable = () => {
+  const [loading, setLoading] = useState<boolean>(true)
+  const { usersData } = useSelector((state: RootState) => state.users)
 
-  return results.data
-}
+  const dispatch = useDispatch<AppDispatch>()
 
-const UserTable = async () => {
-  const t = await getTranslations('partOne')
-  const usersData: User[] = await fetchData()
+  const t = useTranslations('partOne')
 
   const headers: TableHeader<User>[] = [
     { value: t('firstName'), key: 'FirstName' },
@@ -21,11 +22,34 @@ const UserTable = async () => {
     { value: t('mobileNumber'), key: 'Phone' },
     { value: t('email'), key: 'Email' },
   ]
+  const fetchUsersData: () => void = async () => {
+    setLoading(true)
+    try {
+      const results: AxiosResponse = await axios.get(
+        'http://localhost:1337/user-informations'
+      )
+      dispatch(setUsers(results.data))
+    } catch (err) {
+      console.log('err', err)
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchUsersData()
+  }, [])
+
   return (
     <div className='flex flex-col gap-y-1 flex-1 w-full'>
       <h6 className='text-[#6D5CBC] font-bold'>{t('results')}</h6>
-      {usersData.length > 0 ? (
-        <table className='table-auto border-collapse w-full block overflow-y-auto h-[23rem]'>
+      {loading ? (
+        <div className='self-center mt-20'>
+          <Loading />
+        </div>
+      ) : usersData.length > 0 ? (
+        <table className='table-auto border-collapse w-full block overflow-y-auto lg:overflow-x-hidden h-[23rem]'>
           <thead>
             <tr className='bg-[#FAFAFA] border-b border-b-[#F2F2F2]'>
               {headers.map((item, index) => (
@@ -68,7 +92,7 @@ const UserTable = async () => {
           </tbody>
         </table>
       ) : (
-        <h3 className='text-center mt-8'>{t('usersEmpty')}</h3>
+        <h3 className='text-center mt-20'>{t('usersEmpty')}</h3>
       )}
     </div>
   )

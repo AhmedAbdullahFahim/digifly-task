@@ -1,10 +1,13 @@
 'use client'
+import { AppDispatch, RootState } from '@/store'
+import { setUsers } from '@/store/slices/usersSlice'
+import { FormData } from '@/types'
+import axios, { AxiosResponse } from 'axios'
 import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
 import Button from './Button'
 import Input from './Input'
-import { FormData } from '@/types'
-import axios from 'axios'
 
 const UserForm = () => {
   const {
@@ -22,11 +25,19 @@ const UserForm = () => {
     mode: 'onBlur',
   })
 
+  const dispatch = useDispatch<AppDispatch>()
+  const { usersData } = useSelector((state: RootState) => state.users)
+
   const t = useTranslations('partOne')
 
   const onSubmit = async (data: FormData) => {
     try {
-      await axios.post('http://localhost:1337/user-informations', { ...data })
+      const result: AxiosResponse = await axios.post(
+        'http://localhost:1337/user-informations',
+        { ...data }
+      )
+      dispatch(setUsers([...usersData, result.data.data]))
+
       setValue('FirstName', '')
       setValue('Phone', '')
       setValue('LastName', '')

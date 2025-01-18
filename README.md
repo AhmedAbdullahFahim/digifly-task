@@ -1,7 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
-Prequisits: node >= 18.18
+Prequisits: node >= 18.18.0
 
 Clone the repository
 ```bash 

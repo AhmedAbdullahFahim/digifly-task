@@ -29,10 +29,10 @@ const Navbar = () => {
   ]
   return (
     <header className='w-full flex flex-col sm:flex-row items-center px-2 md:px-4 lg:px-8'>
-      <div className='flex flex-1 items-center gap-x-4 md:gap-x-8 lg:gap-x-20'>
+      <div className='flex flex-1 items-center self-start sm:self-auto gap-x-8 md:gap-x-20'>
         <Image src={'/logo.png'} alt='logo' width={76} height={56} />
         <nav>
-          <ul className='flex items-center gap-x-2 sm:gap-x-4 md:gap-x-8 list-none'>
+          <ul className='flex items-center gap-x-4 sm:gap-x-8 md:gap-x-20 list-none'>
             {navbarItems.map((item) => (
               <li key={item.href}>
                 <Link

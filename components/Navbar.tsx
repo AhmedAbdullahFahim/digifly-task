@@ -32,7 +32,7 @@ const Navbar = () => {
       <div className='flex flex-1 items-center self-start sm:self-auto gap-x-8 md:gap-x-20'>
         <Image src={'/logo.png'} alt='logo' width={76} height={56} />
         <nav>
-          <ul className='flex items-center gap-x-4 sm:gap-x-8 md:gap-x-20 list-none'>
+          <ul className='flex items-center gap-x-4 sm:gap-x-8 md:gap-x-12 list-none'>
             {navbarItems.map((item) => (
               <li key={item.href}>
                 <Link

@@ -1,4 +1,5 @@
 'use client'
+import { useTranslations } from 'next-intl'
 import { useRef, useState } from 'react'
 
 const TextEditor = () => {
@@ -6,6 +7,8 @@ const TextEditor = () => {
   const [selectedBgColor, setSelectedBgColor] = useState<string>('#ffffff')
   const [activeButton, setActiveButton] = useState<string>('')
   const editorRef = useRef<HTMLDivElement | null>(null)
+
+  const t = useTranslations('partThree')
 
   const applyStyle = (command: string, value?: string) => {
     document.execCommand(command, false, value || '')
@@ -76,6 +79,14 @@ const TextEditor = () => {
     'Verdana',
   ]
 
+  const fontSizeOptions = [
+    { value: 2, text: t('smaller') },
+    { value: 3, text: t('small') },
+    { value: 4, text: t('normal') },
+    { value: 5, text: t('large') },
+    { value: 6, text: t('larger') },
+  ]
+
   return (
     <div className='border border-[#6D5CBC1A] rounded-sm'>
       <div className='flex items-center flex-wrap gap-y-4 bg-[#F8F7FC] border-b border-b-[#6D5CBC1A] pb-2 xl:pb-0 xl:h-10'>
@@ -134,11 +145,11 @@ const TextEditor = () => {
           onChange={(e) => applyStyle('fontSize', e.target.value)}
           className='outline-none outline-0 mx-4 p-1'
         >
-          <option value='2'>Small</option>
-          <option value='3'>Smaller</option>
-          <option value='4'>Normal</option>
-          <option value='5'>Large</option>
-          <option value='6'>Larger</option>
+          {fontSizeOptions.map((item) => (
+            <option key={item.value} value={item.value}>
+              {item.text}
+            </option>
+          ))}
         </select>
       </div>
 

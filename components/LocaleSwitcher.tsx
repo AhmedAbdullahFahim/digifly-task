@@ -30,7 +30,7 @@ export default function LocaleSwitcher() {
 
   return (
     <button
-      className='flex items-center gap-2 font-[500] text-[#1A1A1A]'
+      className='flex items-center self-end sm:self-auto gap-2 font-[500] text-[#1A1A1A]'
       onClick={switchLanguage}
     >
       {/* have to conditionally render the whole image because it caches if I just conditionally change the src */}

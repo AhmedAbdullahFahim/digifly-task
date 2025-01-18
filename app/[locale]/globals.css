@@ -31,7 +31,10 @@
   border-right-color: #6d5bbe !important;
 }
 
-.textEditor {
-  min-height: 200px;
-  font-family: 'Sans Serif', Arial, sans-serif;
+ul {
+  list-style-type: disc;
+}
+
+ol {
+  list-style-type: auto;
 }

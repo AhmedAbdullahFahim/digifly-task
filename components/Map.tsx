@@ -1,11 +1,11 @@
 'use client'
-import { MapContainer, Marker, Popup, TileLayer, Tooltip } from 'react-leaflet'
-import 'leaflet/dist/leaflet.css'
+import { latLng, LatLngExpression } from 'leaflet'
 import 'leaflet-defaulticon-compatibility'
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'
-import { latLng, LatLngExpression } from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import { useLocale } from 'next-intl'
 import { useEffect, useState } from 'react'
+import { MapContainer, Marker, TileLayer, Tooltip } from 'react-leaflet'
 
 interface Props {
   position?: LatLngExpression
@@ -24,7 +24,7 @@ export default function MyMap({
       if (locale === 'en') {
         setOffset([-20, -20])
       } else {
-        setOffset([270, -20])
+        setOffset([290, -20])
       }
     }
 

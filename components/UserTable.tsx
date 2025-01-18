@@ -6,7 +6,7 @@ import axios, { AxiosResponse } from 'axios'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Loading from './loading'
+import Loading from './Loading'
 
 const UserTable = () => {
   const [loading, setLoading] = useState<boolean>(true)

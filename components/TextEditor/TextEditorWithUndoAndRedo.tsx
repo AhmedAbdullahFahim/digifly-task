@@ -1,38 +1,61 @@
 'use client'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 
 const TextEditor = () => {
   const [content, setContent] = useState('')
+  const [history, setHistory] = useState<string[]>([''])
+  const [historyIndex, setHistoryIndex] = useState(0)
   const editorRef = useRef<HTMLDivElement | null>(null)
 
-  const placeCursorAtEnd = (element: HTMLElement) => {
-    const selection = window.getSelection()
-    const range = document.createRange()
-    range.selectNodeContents(element)
-    range.collapse(false)
-    selection?.removeAllRanges()
-    selection?.addRange(range)
+  const updateContent = (newContent: string) => {
+    if (newContent !== history[historyIndex]) {
+      const newHistory = [...history.slice(0, historyIndex + 1), newContent]
+      setHistory(newHistory)
+      setHistoryIndex(newHistory.length - 1)
+    }
+    setContent(newContent)
   }
 
-  useEffect(() => {
-    if (editorRef.current) {
-      placeCursorAtEnd(editorRef.current)
-    }
-  }, [])
-
-  const handleContentChange = (e: React.FormEvent<HTMLDivElement>) => {
-    setContent(e.currentTarget.innerHTML)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      document.execCommand('insertHTML', false, '<br />')
-    }
+  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
+    const newContent = e.currentTarget.innerHTML
+    updateContent(newContent)
   }
 
   const applyStyle = (command: string, value?: string) => {
     document.execCommand(command, false, value || '')
+  }
+
+  const handleUndo = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1
+      setHistoryIndex(newIndex)
+      const previousContent = history[newIndex]
+      setContent(previousContent)
+      if (editorRef.current) editorRef.current.innerHTML = previousContent
+      placeCursorAtEnd(editorRef.current)
+    }
+  }
+
+  const handleRedo = () => {
+    if (historyIndex < history.length - 1) {
+      const newIndex = historyIndex + 1
+      setHistoryIndex(newIndex)
+      const nextContent = history[newIndex]
+      setContent(nextContent)
+      if (editorRef.current) editorRef.current.innerHTML = nextContent
+      placeCursorAtEnd(editorRef.current)
+    }
+  }
+
+  const placeCursorAtEnd = (element: HTMLElement | null) => {
+    if (element) {
+      const range = document.createRange()
+      const selection = window.getSelection()
+      range.selectNodeContents(element)
+      range.collapse(false)
+      selection?.removeAllRanges()
+      selection?.addRange(range)
+    }
   }
 
   return (
@@ -114,14 +137,25 @@ const TextEditor = () => {
         >
           Numbered List
         </button>
+        <button
+          onClick={() => applyStyle('undo')}
+          className='p-2 bg-gray-200 rounded'
+        >
+          Undo
+        </button>
+        <button
+          onClick={() => applyStyle('redo')}
+          className='p-2 bg-gray-200 rounded'
+        >
+          Redo
+        </button>
       </div>
 
       <div
         ref={editorRef}
         contentEditable
         className='border p-4 rounded-lg min-h-[200px] focus:outline-none bg-white text-black'
-        onInput={handleContentChange}
-        onKeyDown={handleKeyDown}
+        onInput={handleInput}
         dangerouslySetInnerHTML={{ __html: content }}
       ></div>
     </div>

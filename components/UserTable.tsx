@@ -49,7 +49,7 @@ const UserTable = () => {
           <Loading />
         </div>
       ) : usersData.length > 0 ? (
-        <table className='table-auto border-collapse w-full block overflow-y-auto lg:overflow-x-hidden h-[23rem]'>
+        <table className='table-auto border-collapse w-full block overflow-y-auto lg:overflow-x-hidden lg:h-[29rem] xl:h-[24rem]'>
           <thead>
             <tr className='bg-[#FAFAFA] border-b border-b-[#F2F2F2]'>
               {headers.map((item, index) => (
@@ -62,14 +62,14 @@ const UserTable = () => {
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody className='shadow-lg min-w-[100vw]'>
             {usersData.map((row, index) =>
               !row.FirstName ||
               !row.Email ||
               !row.LastName ||
               !row.Phone ? null : (
                 <tr
-                  className={`bg-white ${
+                  className={`bg-white border-x-0 ${
                     index == usersData.length - 1
                       ? 'border-b-0'
                       : 'border-b border-b-[#F2F2F2]'
